@@ -12,7 +12,7 @@ def main(video_path: str, model_path: str, output_path: str, device: str, conf_t
 
     '''
     detection = Detection(model_path, device=device, conf_thresh=conf_thresh, iou_thresh=iou_thresh)
-    visualisation = Visualisation(output_path)
+    visualiser = Visualisation(output_path)
     
     if mode == 'track':
         tracker = Tracker()
@@ -36,7 +36,7 @@ def main(video_path: str, model_path: str, output_path: str, device: str, conf_t
         #     tracker.update(frame)
         #     tracks = tracker.get_tracks()
         #     histories = {track['id']: tracker.get_history(track['id']) for track in tracks}  # New line
-        #     frame_with_annotations = visualisation.draw_tracks(frame, tracks, histories)  # Updated call
+        #     frame_with_annotations = visualiser.draw_tracks(frame, tracks, histories)  # Updated call
         #     print(tracks)
         #     print(histories)
         #     print(bbox)
@@ -48,15 +48,14 @@ def main(video_path: str, model_path: str, output_path: str, device: str, conf_t
                 tracker.add_tracker(frame, bbox)
 
             tracker.update(frame)
-            tracks = tracker.get_tracks()
-            histories = {track['id']: tracker.get_history(track['id']) for track in tracks}
-            print("main_tracks",tracks)
-            frame_with_annotations = visualisation.draw_tracks(frame.copy(), tracks, histories)  # Use a copy
+            main_tracks = tracker.get_tracks()
+            histories = {track['id']: tracker.get_history(track['id']) for track in main_tracks}
+            frame_with_annotations = visualiser.draw_tracks(frame.copy(), main_tracks, histories)  # Use a copy
         else:
-            frame_with_annotations = visualisation.draw_detections(frame, detections)
+            frame_with_annotations = visualiser.draw_detections(frame, detections)
 
         output_frames.append(frame_with_annotations)  # Save frame for video
-        visualisation.save_frame(frame_with_annotations, frame_number)
+        visualiser.save_frame(frame_with_annotations, frame_number)
         cv2.imshow('Frame', frame_with_annotations)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -67,7 +66,7 @@ def main(video_path: str, model_path: str, output_path: str, device: str, conf_t
     cv2.destroyAllWindows()
 
     # After processing all frames, save them as a video
-    visualisation.save_video(output_frames, output_path, frame_size=(frame.shape[1], frame.shape[0]))
+    visualiser.save_video(output_frames, output_path, frame_size=(frame.shape[1], frame.shape[0]))
 
 
 if __name__ == '__main__':

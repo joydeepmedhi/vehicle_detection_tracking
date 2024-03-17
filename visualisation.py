@@ -40,7 +40,7 @@ class Visualisation:
                 cv2.putText(frame, label, (int(det['xmin']), int(det['ymin'])-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, thickness)
         return frame
 
-    def draw_tracks(frame: np.ndarray, tracks: List[Dict], histories: Dict[int, List[Tuple[int, int, int, int]]],
+    def draw_tracks(self, frame: np.ndarray, tracks: List[Dict], histories: Dict[int, List[Tuple[int, int, int, int]]],
                 color: Tuple[int, int, int] = (0, 255, 0), thickness: int = 2, history_color: Tuple[int, int, int] = (0, 0, 255)) -> np.ndarray:
         """
         Draws tracks, their historical paths, and track IDs on a frame.
@@ -53,12 +53,8 @@ class Visualisation:
             thickness (int): Thickness of bounding boxes.
             history_color (Tuple[int, int, int]): Color for track history.
         """
-        print("####", type(tracks))
-
-        print("function tracks", tracks)
 
         for track in tracks:
-            print("type of track", type(track))
             bbox = track['bbox']
             track_id = track['id']
 
@@ -88,7 +84,7 @@ class Visualisation:
         """
         frame_path = os.path.join(self.output_path, f"{filename_prefix}_{frame_number:04d}.jpg")
 
-    def save_video(frames: List[np.ndarray], output_path: str, frame_size: Tuple[int, int], fps: int = 24) -> None:
+    def save_video(self, frames: List[np.ndarray], output_path: str, frame_size: Tuple[int, int], fps: int = 24) -> None:
         """
         Saves the processed frames as a video.
 

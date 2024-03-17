@@ -37,22 +37,19 @@ class Tracker:
         if any(self._calculate_iou(bbox, t['bbox']) > self.iou_threshold for t in self.tracks):
             return  # Skip if overlap is too high
 
-        tracker = cv2.TrackerCSRT_create()
-        print(type(bbox), bbox)
-        print(frame.shape)
-        print(type(frame))
-
+        tracker = cv2.TrackerKCF_create()
         success = True
         tracker.init(frame, bbox)
-        print('success: ', success)
-
+        # print('success: ', success)
+        # tracker = cv2.TrackerCSRT_create()
+        # success = tracker.init(frame, bbox)
+        # print('Initialization success:', success)
 
         if success:
             self.trackers.append((tracker, self.id_counter, 0))  # Add failure count
             self.history[self.id_counter] = [bbox]
             self.id_counter += 1
             print(f"Tracker {self.id_counter - 1} initialized")
-            print("XXXX")
 
     def update(self, frame: cv2.Mat):
         """
@@ -64,7 +61,6 @@ class Tracker:
         self.tracks = []
         for i, (tracker, id_, failure_count) in enumerate(self.trackers):
             success, bbox = tracker.update(frame)
-            print('success of update: ', success)
             if success:
                 self.tracks.append({'id': id_, 'bbox': bbox, 'success': True})
                 self.history[id_].append(bbox)
