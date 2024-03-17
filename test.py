@@ -1,8 +1,9 @@
 import cv2 as cv
 
+#change based on source
 cap = cv.VideoCapture(1)
 
-face_front_cascade = cv.CascadeClassifier("haarcascade_frontalface_alt.xml")    
+face_front_cascade = cv.CascadeClassifier("models/haarcascade_frontalface_alt.xml")    
 tracker = cv.TrackerKCF_create()
 bbox = ()
 initTracker = False  # Flag to indicate if tracker has been initialized

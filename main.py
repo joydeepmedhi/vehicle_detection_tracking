@@ -27,21 +27,8 @@ def main(video_path: str, model_path: str, output_path: str, device: str, conf_t
             break
 
         detections = detection.run_inference(frame)
-
-        # if mode == 'track':
-        #     #tracker.reset()  # Reset trackers for each new frame
-        #     for det in detections:
-        #         bbox = (det['xmin'], det['ymin'], det['xmax'] - det['xmin'], det['ymax'] - det['ymin'])
-        #         tracker.add_tracker(frame, bbox)
-        #     tracker.update(frame)
-        #     tracks = tracker.get_tracks()
-        #     histories = {track['id']: tracker.get_history(track['id']) for track in tracks}  # New line
-        #     frame_with_annotations = visualiser.draw_tracks(frame, tracks, histories)  # Updated call
-        #     print(tracks)
-        #     print(histories)
-        #     print(bbox)
-
         if mode == 'track':
+            #tracker.reset()
             for det in detections:
                 bbox = (det['xmin'], det['ymin'], det['xmax'] - det['xmin'], det['ymax'] - det['ymin'])
                 bbox = tuple(map(int, bbox))

@@ -6,8 +6,8 @@ class Tracker:
     Handles multiple object trackers using the KCF algorithm, with unique IDs, history
     tracking, and additional features for robustness and debugging.
     """
-    def __init__(self, max_history_length: int = 100, failure_threshold: int = 5,
-                 iou_threshold: float = 0.3):
+    def __init__(self, max_history_length: int = 200, failure_threshold: int = 10,
+                 iou_threshold: float = 0.2):
         """
         Initializes the Tracker class.
 
@@ -40,10 +40,6 @@ class Tracker:
         tracker = cv2.TrackerKCF_create()
         success = True
         tracker.init(frame, bbox)
-        # print('success: ', success)
-        # tracker = cv2.TrackerCSRT_create()
-        # success = tracker.init(frame, bbox)
-        # print('Initialization success:', success)
 
         if success:
             self.trackers.append((tracker, self.id_counter, 0))  # Add failure count
